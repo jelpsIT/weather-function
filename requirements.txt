@@ -4,5 +4,4 @@
 
 azure-functions
 requests
-azure-storage-blobs
- 
+azure-storage-blob

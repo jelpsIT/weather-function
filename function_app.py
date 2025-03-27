@@ -3,6 +3,8 @@ import requests
 import json
 from datetime import datetime
 from azure.storage.blob import BlobServiceClient
+import logging  # For proper error logging
+import os  # For environment variables
 
 app = func.FunctionApp()
 
@@ -24,13 +26,16 @@ def get_weather(req: func.HttpRequest) -> func.HttpResponse:
             "timestamp": datetime.utcnow().isoformat()
         }
 
-        # Log to Blob Storage
-        connection_string = req.app.settings["AzureWebJobsStorage"]
-        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-        container_name = "weather-logs"
-        blob_name = f"weather_{result['timestamp'].replace(':', '-')}.json"
-        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-        blob_client.upload_blob(json.dumps(result), overwrite=True)
+        # Log to Blob Storage with error handling
+        try:
+            connection_string = os.environ["AzureWebJobsStorage"]  # Access from environment
+            blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+            container_name = "weather-logs"
+            blob_name = f"weather_{result['timestamp'].replace(':', '-')}.json"
+            blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+            blob_client.upload_blob(json.dumps(result), overwrite=True)
+        except Exception as e:
+            logging.error(f"Blob upload failed: {str(e)}")  # Log errors properly
 
         return func.HttpResponse(
             json.dumps(result),
