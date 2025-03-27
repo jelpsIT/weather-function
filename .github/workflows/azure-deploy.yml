@@ -17,7 +17,8 @@ jobs:
           pip install -r requirements.txt
       - name: Debug Secret and Environment
         run: |
-          echo "Publish profile length: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE | length }}"
+          echo "Publish profile exists: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE != '' }}"
+          echo "Publish profile sample: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE }}"
           echo "App name: jelps-weather-function"
           echo "GitHub ref: $GITHUB_REF"
       - name: Deploy to Azure Functions
