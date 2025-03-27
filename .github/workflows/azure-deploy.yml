@@ -3,6 +3,8 @@ on:
   push:
     branches: [ main ]
 jobs:
+- name: Debug Secret
+  run: echo "Publish profile length: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE | length }}"
   deploy:
     runs-on: ubuntu-latest
     steps:
