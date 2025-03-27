@@ -15,6 +15,11 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Debug Secret and Environment
+        run: |
+          echo "Publish profile length: ${{ secrets.AZURE_FUNCTION_PUBLISH_PROFILE | length }}"
+          echo "App name: jelps-weather-function"
+          echo "GitHub ref: $GITHUB_REF"
       - name: Deploy to Azure Functions
         uses: Azure/functions-action@v1
         with:
