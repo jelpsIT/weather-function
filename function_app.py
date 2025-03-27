@@ -8,8 +8,8 @@ app = func.FunctionApp()
 
 @app.route(route="weather", auth_level=func.AuthLevel.ANONYMOUS)
 def get_weather(req: func.HttpRequest) -> func.HttpResponse:
-    city = req.params.get('city', 'London')  # Default to London
-    api_key = "3e174705e61fc91d949cb4f7ecc29e44" 
+    city = req.params.get('city', 'London')
+    api_key = "3e174705e61fc91d949cb4f7ecc29e44"  
     url = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric"
 
     try:
